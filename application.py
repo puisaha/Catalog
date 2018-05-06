@@ -216,7 +216,13 @@ def shopssJSON():
 @app.route('/shop/')
 def showShops():
     shops = session.query(Shop).order_by(asc(Shop.name))
-    return render_template('shops.html', shops=shops)
+
+    if 'username' not in login_session:  # make sure user has logined
+        return render_template('publiccatalog.html', shop=shops)
+    else:  # if user logined, able to access create a new item
+        return render_template('shops.html', shops=shops)
+                
+
 
 # Create a new restaurant
 
@@ -336,6 +342,28 @@ def deleteItem(shop_id, item_id):
         return redirect(url_for('showItem', shop_id=shop_id))
     else:
         return render_template('deleteDressItem.html', item=itemToDelete)
+
+# Disconnect based on provider
+@app.route('/disconnect')
+def disconnect():
+    if 'provider' in login_session:
+        if login_session['provider'] == 'google':
+            gdisconnect()
+            del login_session['gplus_id']
+            del login_session['access_token']
+        if login_session['provider'] == 'facebook':
+            fbdisconnect()
+            del login_session['facebook_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        del login_session['user_id']
+        del login_session['provider']
+        flash("You have successfully been logged out.")
+        return redirect(url_for('showShops'))
+    else:
+        flash("You were not logged in")
+        return redirect(url_for('showShops'))
 
 
 if __name__ == '__main__':

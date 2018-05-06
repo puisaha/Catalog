@@ -6,7 +6,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
   </script>
 
-<script src="//apis.google.com/js/platform.js?onload=start"> </script>
+  <script src="//apis.google.com/js/platform.js?onload=start"> </script>
 
 <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
 
@@ -14,7 +14,20 @@
 </head>
 
 
-<body>  
+#<body>
+<body class="loginpage">
+  <div class="inline login">
+      {%if 'username' not in session %}
+        <a class="button" href="{{url_for('showLogin')}}">Login </a>
+      {% else %}
+        <a class="button" href="{{url_for('disconnect')}}">Logout </a>
+      {% endif %}
+  </div>
+  <header>
+    <img class="logo" src="{{ url_for('static', filename='shoppinglogo.png') }}" alt="the shopping logo" height="100" width="150">
+    <h1 class="inline"><a href = "{{url_for('showShops')}}" style="color:red">Shopping Catalog Application</a></h1>
+  </header>
+<h1>Log in by using the following option</h1>  
 
 
 <!-- GOOGLE PLUS SIGN IN-->
@@ -37,7 +50,6 @@
 <script>
 function signInCallback(authResult) {
   console.log("inside html");
-
   if (authResult['code']) {
     // Hide the sign-in button now that the user is authorized
     $('#signinButton').attr('style', 'display: none');
