@@ -287,8 +287,8 @@ def newDressItem(shop_id):
         return redirect('/login')
     shop = session.query(Shop).filter_by(id=shop_id).one()
     if request.method == 'POST':
-        newItem = DressItem(name=request.form['name'], description=request.form['description'], price=request.form[
-                           'price'], item=request.form['item'], shop_id=shop_id, user_id=shop.user_id)
+        newItem = DressItem(name=request.form.get('name', None), description=request.form.get('description', None), 
+        	price=request.form.get('price', None), course=request.form.get('course', None), shop_id=shop_id, user_id=shop.user_id)
         session.add(newItem)
         session.commit()
         flash('New Dress %s Item Successfully Created' % (newItem.name))
@@ -306,14 +306,14 @@ def editItem(shop_id, item_id):
     editedItem = session.query(DressItem).filter_by(id=item_id).one()
     shop = session.query(Shop).filter_by(id=shop_id).one()
     if request.method == 'POST':
-        if request.form['name']:
-            editedItem.name = request.form['name']
-        if request.form['description']:
-            editedItem.description = request.form['description']
-        if request.form['price']:
-            editedItem.price = request.form['price']
-        if request.form['item']:
-            editedItem.item = request.form['item']
+        if request.form.get('name', None):
+            editedItem.name = request.form.get('name', None)
+        if request.form.get('description', None):
+            editedItem.description = request.form.get('description', None)
+        if request.form.get('price', None):
+            editedItem.price = request.form.get('price', None)
+        if request.form.get('course', None):
+            editedItem.course = request.form.get('course', None)
         session.add(editedItem)
         session.commit()
         flash('Dress Item Successfully Edited')
