@@ -50,6 +50,7 @@ def gconnect():
         return response
     # Obtain authorization code
     code = request.data
+    
 
     try:
         # Upgrade the authorization code into a credentials object
@@ -68,6 +69,7 @@ def gconnect():
            % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
+    print "2###"
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
         response = make_response(json.dumps(result.get('error')), 500)
@@ -76,6 +78,7 @@ def gconnect():
 
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
+    print "3###"
     if result['user_id'] != gplus_id:
         response = make_response(
             json.dumps("Token's user ID doesn't match given user ID."), 401)
@@ -92,11 +95,15 @@ def gconnect():
 
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
-    if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    print "4###"
+    #if stored_access_token is not None and gplus_id == stored_gplus_id:
+    #    response = make_response(json.dumps('Current user is already connected.'),
+    #                             200)
+    #    response.headers['Content-Type'] = 'application/json'
+    #    print "5###"
+    #    return response
+
+    print "6###"
 
     # Store the access token in the session for later use.
     login_session['access_token'] = credentials.access_token
@@ -112,6 +119,8 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+
+    print login_session['username']
 
     # see if user exists, if it doesn't make a new
     user_id = getUserID(login_session['email'])
@@ -130,6 +139,7 @@ def gconnect():
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
+    print login_session['username']
     return output
 
 # User Helper Functions
@@ -218,7 +228,7 @@ def showShops():
     shops = session.query(Shop).order_by(asc(Shop.name))
 
     if 'username' not in login_session:  # make sure user has logined
-        return render_template('publiccatalog.html', shop=shops)
+        return render_template('publiccatalog.html', shop=shops, creator='Amrita')
     else:  # if user logined, able to access create a new item
         return render_template('shops.html', shops=shops)
                 
@@ -359,6 +369,13 @@ def disconnect():
         del login_session['picture']
         del login_session['user_id']
         del login_session['provider']
+        flash("You have successfully been logged out.")
+        return redirect(url_for('showShops'))
+    elif 'username' in login_session:
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        del login_session['user_id']
         flash("You have successfully been logged out.")
         return redirect(url_for('showShops'))
     else:
