@@ -293,7 +293,7 @@ def showItem(shop_id):
     shop = session.query(Shop).filter_by(id=shop_id).one()
     items = session.query(DressItem).filter_by(
         shop_id=shop_id).all()
-    return render_template('item.html', items=items, shop=shop)
+    return render_template('item.html', items=items, shop=shop, user=login_session['username'], pic=login_session['picture'])
 
 
 # Create a new  item

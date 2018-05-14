@@ -20,32 +20,27 @@
 			<h1>Shops</h1>
 		</div>
 
-		<div class="col-md-10">
+		<div class="padding_left">
 			<a href="{{url_for('newShop')}}">
 				<button class="btn btn-default" id="new-restaurant">
-					<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>Add Shops
+					<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>Add New Shops
 					<!-- <span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>Add Shops -->
 				</button>
 			</a>
 		</div>
 	</div>
 
-
-	
-	<div class="row padding-top padding-bottom">
-		<div class="col-md-1"></div>
-		
-		<div class="col-md-1"></div>
-	</div>
+	<!-- <div class="row"> -->
 	{% for shop in shops %}
 		<a href = "{{url_for('showItem', shop_id = shop.id)}}">
-			<div class="row">
+			
 				<div class="col-md-1"></div>
-					<div class="col-md-10 restaurant-list">
+					<div class="restaurant-list">
 						<h3>{{shop.name}}</h3>
 					</div>
 				<div class="col-md-1"></div>
-			</div>
+
 		</a>
 	{% endfor %}
+	<!-- </div> -->
 {% endblock %}
