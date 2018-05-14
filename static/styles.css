@@ -3,13 +3,13 @@
 	font-weight: 800;
 }
 
-h1 {
+/*h1 {
 	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
 	font-size: 50px;
 	color: black;
 	line-height: 60px;
 	font-weight: 300;
-}
+}*/
 
 h2 {
 	font-size: 24px;
@@ -37,8 +37,8 @@ h3 {
  }
 
  a {
- 	font-size: 14px;
- 	color: #0093B9;
+ 	font-size: 24px;
+ 	
  	line-height: 17px;
  }
 .padding-top {
@@ -54,7 +54,7 @@ h3 {
 	padding: 0;
 }
 .btn {
-	padding: 20px;
+	/*padding: 20px;*/
 	margin: 0;
 	border-color: #9FB80A;
 	border-width: 2px;
@@ -73,24 +73,26 @@ h3 {
 }
 .glyphicon {
 	margin-right: 10px;
+	/*color: blue;*/
 }
 .top-menu {
-	padding-top: 30px;
-	padding-bottom: 30px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: rgb(0, 0, 77);
 }
-.top-menu p {
+/*.top-menu p {
 	margin-bottom: 0;
 	line-height: 16px;
-}
+}*/
 .top-menu a {
-	margin-bottom: 0;
-	line-height: 16px;
+	/*margin-bottom: 0;*/
+	/*line-height: 16px;*/
 	font-size: 16px;
-	color: #7B7573;
+	/*color: red;*/
 	font-weight: 400;
 }
 .divider {
-	height: 15px;
+	height: 25px;
 }
 .divider.blue {
 	background-color: #42C3C9;
@@ -99,23 +101,22 @@ h3 {
 	background-color: #9FB80A;
 }
 .banner.main {
-	height: 150px;
-	background: url("/static/headphone.jpg");
+	/*height: 150px;*/
 	background-position: right;
 	background-repeat: no-repeat;
 	background-size: cover;
 }
 .banner.menu {
-	height: 150px;
+	/*height: 150px;*/
 	background-color: #E1E17F;
 }
 .banner.profile {
-	height: 150px;
+	/*height: 150px;*/
 	background-color: #A6E8EB;
 }
-.banner h1 {
+/*.banner h1 {
 	margin: 45px 0;
-}
+}*/
  .restaurant-list {
  	background-color: #F0F0F0;
  	padding: 20px;
@@ -151,17 +152,40 @@ u }
 }
 .flash {
 	background-color: #98FB98;
-	width:100%;
+	/*width:100%;*/
 	text-decoration: none;
-
 }
 
 .flash li {
 	list-style-type: none;
 	text-align: center;
+}
 
+.button {
+    background-color: rgb(204, 0, 0);
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    #text-align: right;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
 }
-.log {
-	color: #9FB80A;
-	text-align: right;
+
+.button:hover {
+	color: black;
 }
+
+.log{
+	float: right;
+}
+
+.display_inline {
+	display: inline;
+}
+
+/*.display_inline h1 {
+	display: inline;
+}*/

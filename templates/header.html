@@ -1,16 +1,17 @@
 <div class="row top-menu">
-	<div class="col-md-6">
-		<a href="{{url_for('showShops')}}">
-			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All My Shopping Shops
+	<div class="col-md-6 display_inline">
+		<a class="button" href="{{url_for('showShops')}}">
+			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All
 		</a>
 	</div>
-	<div class="col-md-6 text-right">
-					<p>Login Link will go Here </p>
-					<a class="button" href="{{url_for('disconnect')}}">Logout </a>
+
+	<div class="log col-md-6 display_inline">
+		{%if 'username' not in session %}
+	        <a class="button" href="{{url_for('showLogin')}}">Login </a>
+	    {% else %}
+	        <a class="button" href="{{url_for('disconnect')}}">Logout </a>
+	    {% endif %}
 		
 	</div>
-	<div class="log">
-					<a class="button" href="{{url_for('showLogin')}}">Login </a>
-		
-	</div>
+
 </div>
