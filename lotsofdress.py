@@ -25,7 +25,7 @@ User1 = User(name="Robo Barista", email="tinnyTim@udacity.com",
 session.add(User1)
 session.commit()
 
-# Menu for UrbanBurger
+# Menu for burlington
 shop1 = Shop(user_id=1, name="Burlington")
 
 session.add(shop1)
@@ -45,14 +45,14 @@ session.add(menuItem1)
 session.commit()
 
 
-menuItem3 = MenuItem(user_id=1, name="shorts", description="denim",
+menuItem3 = DressItem(user_id=1, name="shorts", description="denim",
                      price="$23.99", course="Bottom ", shop=shop1)
 
 session.add(menuItem3)
 session.commit()
 
 
-# Menu for Super Stir Fry
+# Menu for maccies
 shop2 = Shop(user_id=1, name="Maccies")
 
 session.add(shop2)
@@ -73,7 +73,7 @@ session.add(menuItem2)
 session.commit()
 
 
-# Menu for Panda Garden
+# Menu for walmart
 shop3 = Shop(user_id=1, name="walmart")
 
 session.add(shop3)

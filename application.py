@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
-
+from flask import Flask, render_template, request
+from flask import redirect, jsonify, url_for, flash
 
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
@@ -43,6 +43,10 @@ def showLogin():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    """
+    Gathers data from Google Sign In API and places it inside a
+    session variable.
+    """
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
@@ -50,7 +54,6 @@ def gconnect():
         return response
     # Obtain authorization code
     code = request.data
-    
 
     try:
         # Upgrade the authorization code into a credentials object
@@ -96,16 +99,13 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     print "4###"
-    #if stored_access_token is not None and gplus_id == stored_gplus_id:
-    #    response = make_response(json.dumps('Current user is already connected.'),
-    #                             200)
-    #    response.headers['Content-Type'] = 'application/json'
-    #    print "5###"
-    #    return response
+# if stored_access_token is not None and gplus_id == stored_gplus_id:
+#    response = make_response(json.dumps('Current user is already connected.'),
+#                             200)
+#    response.headers['Content-Type'] = 'application/json'
+#    return response
 
-    print "6###"
-
-    # Store the access token in the session for later use.
+# Store the access token in the session for later use.
     login_session['access_token'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
 
@@ -136,7 +136,8 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; height:300px; border-radius:150px;'
+    output += '-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     print login_session['username']
@@ -228,12 +229,10 @@ def showShops():
     shops = session.query(Shop).order_by(asc(Shop.name))
 
     if 'username' not in login_session:  # make sure user has logined
-        return render_template('publiccatalog.html', shop=shops, creator='Amrita')
+        return render_template(
+            'publiccatalog.html', shop=shops, creator='Amrita')
     else:  # if user logined, able to access create a new item
         return render_template('shops.html', shops=shops)
-                
-
-
 # Create a new restaurant
 
 
@@ -293,7 +292,9 @@ def showItem(shop_id):
     shop = session.query(Shop).filter_by(id=shop_id).one()
     items = session.query(DressItem).filter_by(
         shop_id=shop_id).all()
-    return render_template('item.html', items=items, shop=shop, user=login_session['username'], pic=login_session['picture'])
+    return render_template(
+        'item.html', items=items, shop=shop,
+        user=login_session['username'], pic=login_session['picture'])
 
 
 # Create a new  item
@@ -303,8 +304,11 @@ def newDressItem(shop_id):
         return redirect('/login')
     shop = session.query(Shop).filter_by(id=shop_id).one()
     if request.method == 'POST':
-        newItem = DressItem(name=request.form.get('name', None), description=request.form.get('description', None), 
-            price=request.form.get('price', None), course=request.form.get('course', None),
+        newItem = DressItem(
+            name=request.form.get('name', None),
+            description=request.form.get('description', None),
+            price=request.form.get('price', None),
+            course=request.form.get('course', None),
             shop_id=shop_id, creator_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
@@ -316,13 +320,13 @@ def newDressItem(shop_id):
 # Edit a menu item
 
 
-@app.route('/shop/<int:shop_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
+@app.route(
+    '/shop/<int:shop_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def editItem(shop_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
     editedItem = session.query(DressItem).filter_by(id=item_id).one()
     if editedItem.creator_id == login_session['user_id']:
-        #editedItem = session.query(DressItem).filter_by(id=item_id).one()
         shop = session.query(Shop).filter_by(id=shop_id).one()
         if request.method == 'POST':
             if request.form.get('name', None):
@@ -338,27 +342,34 @@ def editItem(shop_id, item_id):
             flash('Dress Item Successfully Edited')
             return redirect(url_for('showItem', shop_id=shop_id))
         else:
-            return render_template('editdressitem.html', shop_id=shop_id, item_id=item_id, item=editedItem)
+            return render_template(
+                'editdressitem.html', shop_id=shop_id,
+                item_id=item_id, item=editedItem)
     else:
         return redirect(url_for('showItem', shop_id=shop_id))
 
 
 # Delete a menu item
-@app.route('/shop/<int:shop_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
+@app.route(
+    '/shop/<int:shop_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(shop_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
-    shop = session.query(Shop).filter_by(id=shop_id).one()
     itemToDelete = session.query(DressItem).filter_by(id=item_id).one()
-    if request.method == 'POST':
-        session.delete(itemToDelete)
-        session.commit()
-        flash('Dress Item Successfully Deleted')
-        return redirect(url_for('showItem', shop_id=shop_id))
+    if itemToDelete.creator_id == login_session['user_id']:
+        shop = session.query(Shop).filter_by(id=shop_id).one()
+        if request.method == 'POST':
+            session.delete(itemToDelete)
+            session.commit()
+            flash('Dress Item Successfully Deleted')
+            return redirect(url_for('showItem', shop_id=shop_id))
+        else:
+            return render_template('deleteDressItem.html', item=itemToDelete)
     else:
-        return render_template('deleteDressItem.html', item=itemToDelete)
-
+        return redirect(url_for('showItem', shop_id=shop_id))
 # Disconnect based on provider
+
+
 @app.route('/disconnect')
 def disconnect():
     if 'provider' in login_session:
@@ -392,5 +403,3 @@ if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
-
-    
