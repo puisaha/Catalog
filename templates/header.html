@@ -5,6 +5,14 @@
 		</a>
 	</div>
 
+	<div class="display_inline">
+		<figure class="creator">
+			<img src="{{pic}}">
+		</figure>
+		<span class="creator">{{user}}</span>
+
+	</div>
+
 	<div class="log display_inline">
 		{%if 'username' not in session %}
 	        <a class="button" href="{{url_for('showLogin')}}">Login </a>

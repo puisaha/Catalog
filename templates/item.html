@@ -19,10 +19,7 @@
 <div class="row banner menu">
 	<div class="col-md-11 col-md-offset-1 padding-none">
 		<h1>{{ shop.name }}
-			<figure class="creator">
-				<img src="{{pic}}">
-			</figure>
-			<span class="creator">{{user}}</span>
+			
 		</h1>
 
 	</div>
@@ -62,7 +59,8 @@
 			<h3>{{i.name}}</h3>
 			<p>{{i.description}}</p>
 			<p class="menu-price">{{i.price}}</p>
-			<a href='{{url_for('editItem', shop_id = shop.id, item_id=i.id ) }}'>Edit</a> | 
+			<a href='{{url_for('editItem', shop_id = shop.id, item_id=i.id) }}'>Edit</a> |
+			<!-- <a href='{{url_for('editItem', shop_id = shop.id, item_id=i.id, creator_id=i.creator_id) }}'>Edit</a> --> 
 			<a href='{{url_for('deleteItem', shop_id = shop.id, item_id=i.id ) }}'>Delete</a>
 		</div>
 		{% endif %}
@@ -76,7 +74,7 @@
 			<h3>{{i.name}}</h3>
 			<p>{{i.description}}</p>
 			<p class="menu-price">{{i.price}}</p>
-			<a href='{{url_for('editItem', shop_id = shop.id, item_id=i.id ) }}'>Edit</a> | 
+			<a href='{{url_for('editItem', shop_id = shop.id, item_id=i.id) }}'>Edit</a> | 
 			<a href='{{url_for('deleteItem', shop_id = shop.id, item_id=i.id ) }}'>Delete</a>
 		</div>
 		{% endif %}
@@ -90,7 +88,7 @@
 			<h3>{{i.name}}</h3>
 			<p>{{i.description}}</p>
 			<p class="menu-price">{{i.price}}</p>
-			<a href='{{url_for('editItem', shop_id = shop.id, item_id=i.id ) }}'>Edit</a> | 
+			<a href='{{url_for('editItem', shop_id = shop.id, item_id=i.id) }}'>Edit</a> | 
 			<a href='{{url_for('deleteItem', shop_id = shop.id, item_id=i.id ) }}'>Delete</a>
 		</div>
 		{% endif %}
@@ -102,7 +100,7 @@
 			<h3>{{i.name}}</h3>
 			<p>{{i.description}}</p>
 			<p class="menu-price">{{i.price}}</p>
-			<a href='{{url_for('editItem', shop_id = shop.id, item_id=i.id ) }}'>Edit</a> | 
+			<a href='{{url_for('editItem', shop_id = shop.id, item_id=i.id) }}'>Edit</a> | 
 			<a href='{{url_for('deleteItem', shop_id = shop.id, item_id=i.id ) }}'>Delete</a>
 		</div>
 		{% endif %}

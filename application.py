@@ -304,7 +304,8 @@ def newDressItem(shop_id):
     shop = session.query(Shop).filter_by(id=shop_id).one()
     if request.method == 'POST':
         newItem = DressItem(name=request.form.get('name', None), description=request.form.get('description', None), 
-        	price=request.form.get('price', None), course=request.form.get('course', None), shop_id=shop_id, user_id=shop.user_id)
+            price=request.form.get('price', None), course=request.form.get('course', None),
+            shop_id=shop_id, creator_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
         flash('New Dress %s Item Successfully Created' % (newItem.name))
@@ -320,22 +321,26 @@ def editItem(shop_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
     editedItem = session.query(DressItem).filter_by(id=item_id).one()
-    shop = session.query(Shop).filter_by(id=shop_id).one()
-    if request.method == 'POST':
-        if request.form.get('name', None):
-            editedItem.name = request.form.get('name', None)
-        if request.form.get('description', None):
-            editedItem.description = request.form.get('description', None)
-        if request.form.get('price', None):
-            editedItem.price = request.form.get('price', None)
-        if request.form.get('course', None):
-            editedItem.course = request.form.get('course', None)
-        session.add(editedItem)
-        session.commit()
-        flash('Dress Item Successfully Edited')
-        return redirect(url_for('showItem', shop_id=shop_id))
+    if editedItem.creator_id == login_session['user_id']:
+        #editedItem = session.query(DressItem).filter_by(id=item_id).one()
+        shop = session.query(Shop).filter_by(id=shop_id).one()
+        if request.method == 'POST':
+            if request.form.get('name', None):
+                editedItem.name = request.form.get('name', None)
+            if request.form.get('description', None):
+                editedItem.description = request.form.get('description', None)
+            if request.form.get('price', None):
+                editedItem.price = request.form.get('price', None)
+            if request.form.get('course', None):
+                editedItem.course = request.form.get('course', None)
+            session.add(editedItem)
+            session.commit()
+            flash('Dress Item Successfully Edited')
+            return redirect(url_for('showItem', shop_id=shop_id))
+        else:
+            return render_template('editdressitem.html', shop_id=shop_id, item_id=item_id, item=editedItem)
     else:
-        return render_template('editdressitem.html', shop_id=shop_id, item_id=item_id, item=editedItem)
+        return redirect(url_for('showItem', shop_id=shop_id))
 
 
 # Delete a menu item
@@ -387,3 +392,5 @@ if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
+
+    

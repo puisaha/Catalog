@@ -42,7 +42,9 @@ class DressItem(Base):
     course = Column(String(250))
     shop_id = Column(Integer, ForeignKey('shop.id'))
     shop = relationship(Shop)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    #user_id = Column(Integer, ForeignKey('user.id'))
+    #user = relationship(User)
+    creator_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
     @property
@@ -55,16 +57,6 @@ class DressItem(Base):
             'price': self.price,
             'course': self.course,
         }
-
-
-
-
-
-
-
-
-
-
 
 
 
