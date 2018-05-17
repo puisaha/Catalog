@@ -1,5 +1,11 @@
-from flask import Flask, render_template, request
-from flask import redirect, jsonify, url_for, flash
+from flask import (
+                    Flask,
+                    render_template,
+                    request,
+                    redirect,
+                    jsonify,
+                    url_for,
+                    flash)
 
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
@@ -99,11 +105,7 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     print "4###"
-# if stored_access_token is not None and gplus_id == stored_gplus_id:
-#    response = make_response(json.dumps('Current user is already connected.'),
-#                             200)
-#    response.headers['Content-Type'] = 'application/json'
-#    return response
+
 
 # Store the access token in the session for later use.
     login_session['access_token'] = credentials.access_token
@@ -242,7 +244,7 @@ def newShop():
         return redirect('/login')
     if request.method == 'POST':
         newShop = Shop(
-            name=request.form['name'], user_id=login_session['user_id'])
+            name=request.form['name'], creator_id=login_session['user_id'])
         session.add(newShop)
         flash('New Shop %s Successfully Created' % newShop.name)
         session.commit()
@@ -250,7 +252,7 @@ def newShop():
     else:
         return render_template('newShop.html')
 
-# Edit a restaurant
+# Edit a shop
 
 
 @app.route('/shop/<int:shop_id>/edit/', methods=['GET', 'POST'])
@@ -259,29 +261,36 @@ def editShop(shop_id):
         return redirect('/login')
     editedShop = session.query(
         Shop).filter_by(id=shop_id).one()
-    if request.method == 'POST':
-        if request.form['name']:
-            editedShop.name = request.form['name']
-            flash('Shop Successfully Edited %s' % editedShop.name)
-            return redirect(url_for('showShops'))
+    if editedShop.creator_id == login_session['user_id']:
+        if request.method == 'POST':
+            if request.form['name']:
+                editedShop.name = request.form['name']
+                flash('Shop Successfully Edited %s' % editedShop.name)
+                return redirect(url_for('showShops'))
+        else:
+            return render_template('editShop.html', shop=editedShop)
     else:
-        return render_template('editShop.html', shop=editedShop)
+        return redirect(url_for('showShops'))
 
 
-# Delete a restaurant
+# Delete a shop
 @app.route('/shop/<int:shop_id>/delete/', methods=['GET', 'POST'])
 def deleteShop(shop_id):
     if 'username' not in login_session:
         return redirect('/login')
     shopToDelete = session.query(
         Shop).filter_by(id=shop_id).one()
-    if request.method == 'POST':
-        session.delete(shopToDelete)
-        flash('%s Successfully Deleted' % shopToDelete.name)
-        session.commit()
-        return redirect(url_for('showShops', shop_id=shop_id))
+    if shopToDelete.creator_id == login_session['user_id']:
+        if request.method == 'POST':
+            session.delete(shopToDelete)
+            flash('%s Successfully Deleted' % shopToDelete.name)
+            session.commit()
+            return redirect(url_for('showShops'))
+        else:
+            return render_template('deleteShop.html', shop=shopToDelete)
     else:
-        return render_template('deleteShop.html', shop=shopToDelete)
+        return redirect(url_for('showShops'))
+
 
 # Show a restaurant menu
 

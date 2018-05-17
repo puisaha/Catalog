@@ -136,6 +136,7 @@ h3 {
 .flash {
 	background-color: #98FB98;
 	text-decoration: none;
+	margin-top: 80px;
 }
 
 .flash li {
@@ -170,7 +171,4 @@ h3 {
 
 .padding_left {
 	padding-left: 15px;
-}
-h1 {
-	margin-top: 80px;
 }
